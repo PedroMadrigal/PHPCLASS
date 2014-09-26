@@ -1,0 +1,48 @@
+<?php
+
+	class Conexion{
+		public $con;
+		public $base;
+
+		function __construct(){
+			$this->con = mysql_connect("localhost","root","") or die ("ERROR EN LA CONEXION CON MYSQL: ".mysql_error());
+			$this->base = mysql_select_db ("yoga",$this->con) or die ("ERROR AL CONECTAR CON LA BASE DE DATOS: ".mysql_error());
+		}
+	}
+	/**
+	* 
+	*/
+	class Centro
+	{
+		public $con;
+		function __construct()
+		{
+			$this->con = new Conexion();
+		}
+
+		public function Agregar($id,$nombre,$tel,$cel,$email)
+		{
+			return $registro=mysql_query("INSERT INTO usuarios(Id_cliente,Nombre,Telefono,Celular,Correo) VALUES ('$id','$nombre','$tel','$cel','$email')", $this->con->con) or die('Error al subir'.mysql_error());
+		}
+
+		public function Borrar($id)
+		{
+			return $registro = mysql_query("DELETE FROM usuarios WHERE Id_cliente='$id'");
+		}
+
+		public function Modificar($id,$nombre,$cel,$tel,$em)
+		{
+			
+			$sql = "UPDATE usuarios SET Nombre='$nombre', Celular=" . $cel . ",Telefono=" . $tel . ",Correo='$em' WHERE Id_cliente=".$id;
+			$registro = mysql_query($sql,$this->con->con);
+			return $sql;
+		}
+		public function Pagos($name,$can,$ti)
+		{
+			$hoy = date("Y-m-d ");
+			return $registro = mysql_query("INSERT INTO pagos(Nom_Cliente,Cantidad,Tipo,Fecha) VALUES('$name',$can,'$ti','$hoy')");
+		}
+	}
+
+
+?>
